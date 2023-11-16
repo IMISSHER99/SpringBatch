@@ -1,0 +1,17 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:6432/ecommerce
+    username: admin
+    password: appu99vinod
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 5
+      idle-timeout: 30000
+  jpa:
+    hibernate:
+      ddl-auto: 'create'
+  batch:
+    jdbc:
+      initialize-schema: always
+      table-prefix: filegen.BATCH_
