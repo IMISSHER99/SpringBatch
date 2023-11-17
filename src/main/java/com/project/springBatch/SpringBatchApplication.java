@@ -1,9 +1,7 @@
 package com.project.springBatch;
 
 import com.project.springBatch.constants.JobParameterConstants;
-import org.springframework.batch.core.Job;
-import org.springframework.batch.core.JobParameters;
-import org.springframework.batch.core.JobParametersBuilder;
+import org.springframework.batch.core.*;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +29,10 @@ public class SpringBatchApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+
 		JobParameters jobParameters = new JobParametersBuilder().addLocalDateTime(JobParameterConstants.START_TIME, LocalDateTime.now()).toJobParameters();
-		jobLauncher.run(job, jobParameters);
+		JobExecution jobExecution = jobLauncher.run(job, jobParameters);
+		if(jobExecution.getStatus().equals(BatchStatus.COMPLETED)) System.exit(0);
+		else System.exit(1);
 	}
 }

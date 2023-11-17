@@ -1,5 +1,6 @@
 package com.project.springBatch.config;
 
+import com.project.springBatch.tasklet.FormatMappingTasklet;
 import com.project.springBatch.tasklet.HelloTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
@@ -15,10 +16,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
+@EnableBatchProcessing(tablePrefix = "filegen.BATCH_")
 public class BatchConfiguration {
 
+    private final HelloTasklet helloTasklet;
+    private final FormatMappingTasklet fileFormatMappingTasklet;
+
     @Autowired
-    private HelloTasklet helloTasklet;
+    public BatchConfiguration(HelloTasklet helloTasklet, FormatMappingTasklet fileFormatMappingTasklet) {
+        this.helloTasklet = helloTasklet;
+        this.fileFormatMappingTasklet = fileFormatMappingTasklet;
+    }
 
     @Bean
     public Step helloTaskletStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
@@ -28,10 +36,18 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job sampleJob(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep) {
+    public Step fileFormatMappingStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+        return new StepBuilder("fileFormatMappingStep", jobRepository)
+                .tasklet(fileFormatMappingTasklet, platformTransactionManager)
+                .build();
+    }
+
+    @Bean
+    public Job sampleJob(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep, @Qualifier("fileFormatMappingStep") Step fileFormatMappingStep) {
         return new JobBuilder("sampleJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(helloTaskletStep)
+                .next(fileFormatMappingStep)
                 .build();
     }
 }

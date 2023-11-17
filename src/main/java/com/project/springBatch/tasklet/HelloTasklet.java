@@ -1,6 +1,7 @@
 package com.project.springBatch.tasklet;
 
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.StepExecution;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class HelloTasklet implements Tasklet, StepExecutionListener {
 
+    @Setter
     private StepExecution stepExecution;
 
     @Override
@@ -28,7 +30,4 @@ public class HelloTasklet implements Tasklet, StepExecutionListener {
         return RepeatStatus.FINISHED;
     }
 
-    public void setStepExecution(StepExecution stepExecution) {
-        this.stepExecution = stepExecution;
-    }
 }
