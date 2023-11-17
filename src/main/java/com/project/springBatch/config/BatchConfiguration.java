@@ -15,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.PlatformTransactionManager;
 
 @Configuration
-@EnableBatchProcessing
 public class BatchConfiguration {
 
     @Autowired
@@ -29,8 +28,8 @@ public class BatchConfiguration {
     }
 
     @Bean
-    public Job job(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep) {
-        return new JobBuilder("job", jobRepository)
+    public Job sampleJob(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep) {
+        return new JobBuilder("sampleJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(helloTaskletStep)
                 .build();
