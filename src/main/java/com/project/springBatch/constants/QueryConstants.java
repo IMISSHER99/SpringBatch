@@ -8,5 +8,6 @@ public final class QueryConstants {
             "FROM ConsumerFileFormatMapping cffm " +
             "JOIN cffm.consumerMaster cm " +
             "JOIN cffm.fileType ft " +
-            "JOIN ConsumerFileFormatDataMapping cffdm ON cffm.consumerFormatId = cffdm.consumerFileFormatMapping.consumerFormatId";
+            "JOIN ConsumerFileFormatDataMapping cffdm ON cffm.consumerFormatId = cffdm.consumerFileFormatMapping.consumerFormatId " +
+            "AND cm.consumerName=:consumer_name AND cm.frequency=:frequency AND cm.processId=:process_id ORDER BY cffdm.columnOrder ASC";
 }

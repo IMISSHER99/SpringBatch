@@ -28,6 +28,12 @@ public class BatchConfiguration {
         this.fileFormatMappingTasklet = fileFormatMappingTasklet;
     }
 
+    /**
+     * Demo Tasklet that logs Hello World!!
+     * @param jobRepository Default JobRepository
+     * @param platformTransactionManager Default TransactionManager
+     * @return Step
+     */
     @Bean
     public Step helloTaskletStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("helloTaskletStep", jobRepository)
@@ -35,6 +41,13 @@ public class BatchConfiguration {
                 .build();
     }
 
+    /**
+     * Tasklet that is responsible for getting the file format mapping data
+     * and storing it into the job execution context
+     * @param jobRepository Default JobRepository
+     * @param platformTransactionManager Default TransactionManager
+     * @return Step
+     */
     @Bean
     public Step fileFormatMappingStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
         return new StepBuilder("fileFormatMappingStep", jobRepository)
@@ -42,6 +55,13 @@ public class BatchConfiguration {
                 .build();
     }
 
+    /**
+     * JOB configuration for executing the steps
+     * @param jobRepository Default JobRepository
+     * @param helloTaskletStep HelloTasklet
+     * @param fileFormatMappingStep FileFormatMappingTasklet
+     * @return Job
+     */
     @Bean
     public Job sampleJob(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep, @Qualifier("fileFormatMappingStep") Step fileFormatMappingStep) {
         return new JobBuilder("sampleJob", jobRepository)
