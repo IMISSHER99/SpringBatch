@@ -10,4 +10,9 @@ public final class QueryConstants {
             "JOIN cffm.fileType ft " +
             "JOIN ConsumerFileFormatDataMapping cffdm ON cffm.consumerFormatId = cffdm.consumerFileFormatMapping.consumerFormatId " +
             "AND cm.consumerName=:consumer_name AND cm.frequency=:frequency AND cm.processId=:process_id ORDER BY cffdm.columnOrder ASC";
+
+    public static final String JSON_QUERY_BUILDER = "SELECT CONTENT FROM ";
+
+    public static final String SELECT = "SELECT ";
+    public static final String FROM = " FROM ";
 }

@@ -2,6 +2,7 @@ package com.project.springBatch.config;
 
 import com.project.springBatch.tasklet.FormatMappingTasklet;
 import com.project.springBatch.tasklet.HelloTasklet;
+import com.project.springBatch.tasklet.QueryBuilderTasklet;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -21,11 +22,13 @@ public class BatchConfiguration {
 
     private final HelloTasklet helloTasklet;
     private final FormatMappingTasklet fileFormatMappingTasklet;
+    private final QueryBuilderTasklet queryBuilderTasklet;
 
     @Autowired
-    public BatchConfiguration(HelloTasklet helloTasklet, FormatMappingTasklet fileFormatMappingTasklet) {
+    public BatchConfiguration(HelloTasklet helloTasklet, FormatMappingTasklet fileFormatMappingTasklet, QueryBuilderTasklet queryBuilderTasklet) {
         this.helloTasklet = helloTasklet;
         this.fileFormatMappingTasklet = fileFormatMappingTasklet;
+        this.queryBuilderTasklet = queryBuilderTasklet;
     }
 
     /**
@@ -56,6 +59,19 @@ public class BatchConfiguration {
     }
 
     /**
+     * Tasklet that is responsible for preparing the query
+     * @param jobRepository Default JobRepository
+     * @param platformTransactionManager Default PlatformTransactionManager
+     * @return Step
+     */
+    @Bean
+    public Step queryBuilderStep(JobRepository jobRepository, PlatformTransactionManager platformTransactionManager) {
+        return new StepBuilder("queryBuilderStep", jobRepository)
+                .tasklet(queryBuilderTasklet, platformTransactionManager)
+                .build();
+    }
+
+    /**
      * JOB configuration for executing the steps
      * @param jobRepository Default JobRepository
      * @param helloTaskletStep HelloTasklet
@@ -63,11 +79,15 @@ public class BatchConfiguration {
      * @return Job
      */
     @Bean
-    public Job sampleJob(JobRepository jobRepository, @Qualifier("helloTaskletStep") Step helloTaskletStep, @Qualifier("fileFormatMappingStep") Step fileFormatMappingStep) {
+    public Job sampleJob(JobRepository jobRepository,
+                         @Qualifier("helloTaskletStep") Step helloTaskletStep,
+                         @Qualifier("fileFormatMappingStep") Step fileFormatMappingStep,
+                         @Qualifier("queryBuilderStep") Step queryBuilderStep) {
         return new JobBuilder("sampleJob", jobRepository)
                 .incrementer(new RunIdIncrementer())
                 .start(helloTaskletStep)
                 .next(fileFormatMappingStep)
+                .next(queryBuilderStep)
                 .build();
     }
 }

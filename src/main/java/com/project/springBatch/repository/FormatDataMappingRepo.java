@@ -12,6 +12,13 @@ import java.util.List;
 @Repository
 public interface FormatDataMappingRepo extends JpaRepository<ConsumerFileFormatDataMapping, Integer> {
 
+    /**
+     * File format mapping query
+     * @param consumerName consumer name
+     * @param processId process id
+     * @param frequency frequency
+     * @return Data
+     */
     @Query(QueryConstants.FILE_FORMAT_AND_MAPPING)
     List<Object[]> fetchFileFormatMappingData(@Param("consumer_name") String consumerName, @Param("process_id") String processId, @Param("frequency") String frequency);
 }
