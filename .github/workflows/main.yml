@@ -26,9 +26,8 @@ jobs:
         uses: gradle/gradle-build-action@v2
 
       - name: Execute Gradle Build
-        run: ./gradlew build
+        run: gradle build
 
       - name: Run Tests
         run: |
-          ./gradlew test > logs.txt
-          cat logs.txt
+          gradle test
