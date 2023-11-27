@@ -31,16 +31,8 @@ jobs:
       - name: Run Tests and Generate Report
         run: |
             mkdir -p build/reports/tests
-            gradle test --tests '*' --info
-
-            # Generate test report in XML format
-            gradle test --tests '*' --info test --rerun-tasks --continue
-
-            # Copy the test report XML to a specific location
+            gradle build
             cp -r build/test-results/* build/reports/tests/
-
-            # Parse the XML report and display test results
             TEST_RESULTS=$(grep -o '<testcase[^>]*name="[^"]*"[^>]*classname="[^"]*"[^>]*failure[^>]*' build/reports/tests/*.xml | awk -F '"' '{print "Test Name: "$4" - Class Name: "$6" - Status: "($8 ? "FAILED" : "PASSED")}')
-
             echo "Test Results:"
             echo "$TEST_RESULTS"
