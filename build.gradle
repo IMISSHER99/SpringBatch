@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.2.0'
 	id 'io.spring.dependency-management' version '1.1.4'
+	id 'jacoco'
 }
 
 group = 'com.project'
@@ -42,7 +43,19 @@ dependencies {
 	testImplementation 'org.springframework.batch:spring-batch-test'
 }
 
+jacoco {
+	toolVersion = "0.8.9" // Use the desired version of JaCoCo
+}
+
 tasks.named('test') {
-	testLogging.showStandardStreams = true
 	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = true // Enable XML report generation
+		html.required = true // Enable HTML report generation
+	}
 }
