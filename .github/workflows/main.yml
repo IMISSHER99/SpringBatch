@@ -33,6 +33,6 @@ jobs:
             mkdir -p build/reports/tests
             gradle build
             cp -r build/test-results/* build/reports/tests/
-            TEST_RESULTS=$(grep -o '<testcase[^>]*name="[^"]*"[^>]*classname="[^"]*"[^>]*failure[^>]*' build/reports/tests/*.xml | awk -F '"' '{print "Test Name: "$4" - Class Name: "$6" - Status: "($8 ? "FAILED" : "PASSED")}')
+            TEST_RESULTS=$(grep -o '<testcase[^>]*name="[^"]*"[^>]*classname="[^"]*"[^>]*failure[^>]*' build/reports/tests/test*.xml | awk -F '"' '{print "Test Name: "$4" - Class Name: "$6" - Status: "($8 ? "FAILED" : "PASSED")}')
             echo "Test Results:"
             echo "$TEST_RESULTS"
