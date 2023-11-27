@@ -30,4 +30,4 @@ jobs:
 
       - name: Run Tests
         run: |
-          gradle test
+          gradle test -i
