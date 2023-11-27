@@ -40,7 +40,7 @@ jobs:
             cp -r build/test-results/* build/reports/tests/
 
             # Parse the XML report and display test results
-            TEST_RESULTS=$(xmlstarlet sel -t -m "//testcase" -v "@name" -o " - " -v "@classname" -o " - " -v "failure/@message" -n build/reports/tests/*.xml)
+            TEST_RESULTS=$(grep -o '<testcase[^>]*name="[^"]*"[^>]*classname="[^"]*"[^>]*failure[^>]*' build/reports/tests/*.xml | awk -F '"' '{print "Test Name: "$4" - Class Name: "$6" - Status: "($8 ? "FAILED" : "PASSED")}')
 
             echo "Test Results:"
             echo "$TEST_RESULTS"
