@@ -28,6 +28,19 @@ jobs:
       - name: Execute Gradle Build
         run: gradle build
 
-      - name: Run Tests
+      - name: Run Tests and Generate Report
         run: |
-          gradle test -i
+            mkdir -p build/reports/tests
+            gradle test --tests '*' --info
+
+            # Generate test report in XML format
+            gradle test --tests '*' --info test --rerun-tasks --continue
+
+            # Copy the test report XML to a specific location
+            cp -r build/test-results/* build/reports/tests/
+
+            # Parse the XML report and display test results
+            TEST_RESULTS=$(xmllint --xpath "//testsuite" build/reports/tests/*.xml 2>/dev/null)
+
+            echo "Test Results:"
+            echo "$TEST_RESULTS"
