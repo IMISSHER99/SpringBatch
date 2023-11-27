@@ -32,7 +32,3 @@ jobs:
         run: |
           ./gradlew test > logs.txt
           cat logs.txt
-
-      - name: Display test report
-        run: |
-          cat build/reports/index.html
